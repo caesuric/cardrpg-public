@@ -1,5 +1,4 @@
 import angular from 'angular'
-import app from 'cardrpg'
 import * as dragDropBehaviors from 'dragDropBehaviors'
 import * as constants from 'cardrpgConstants'
 import {updater} from 'gameComm'
