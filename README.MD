@@ -55,6 +55,7 @@ This game was in development from early 2016 to about mid 2017, at which point I
 * Performance may be an issue on slower computers or with standard Python. I had a fix in the works but can't remember if it's implemented yet.
 * Several gameplay concepts are incomplete, particularly as regards "thinning" your deck at the end of a dungeon
 * LAN play will usually work fine -- however, playing across the Internet will likely be an issue, as the data sent is not sufficiently optimized
+* The monster key at the bottom right hand of the screen appears to have stopped displaying multiple monsters properly after upgrading dependencies
 * I was learning as I coded, so there's a lot of stuff that is not nearly as clean as I would like :)
 * The icon images are just grabbed from Google Image searches and need to be replaced stat before doing much with this
 * This entire thing needs unit tests like whoa
