@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+
+# compiled files
+/web/*
+!/web/*.html
+!/web/assets
+/web_es5/*
+!/web_es5/css
+
+# editor files
+/.vscode
+
+# dependencies
+/node_modules
+
+# save files
+/server/*.dat

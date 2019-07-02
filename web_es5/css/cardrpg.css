@@ -1,0 +1,225 @@
+.xl-modal .modal-dialog {
+    width: 1500px;
+}
+
+.drop-pane {
+    float: left;
+    width: 49%;
+    min-height: 200px;
+    border: 1px solid black;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.drop-active {
+    border-color: #aaa;
+}
+
+.drop-target {
+    background-color: #29e;
+    border-color: #fff;
+    border-style: solid;
+}
+
+.draggable {
+    display: inline-block;
+    min-width: 40px;
+    padding: 2em 0.5em;
+    color: #fff;
+    background-color: #29e;
+    border: solid 2px #fff;
+    -webkit-transform: translate(0px, 0px);
+    transform: translate(0px, 0px);
+    transition: background-color 0.3s;
+}
+
+.draggable.can-drop {
+    color: #000;
+    background-color: #4e4;
+}
+
+.drag-panel-title {
+    float: left;
+    width: 49%;
+    display: inline-block;
+}
+
+.loot-card {
+    display: inline-block;
+    background-color: black;
+    color: white;
+    width: 170px;
+    height: 256px;
+    border: 1px solid white;
+    vertical-align: top;
+}
+
+.half-pane {
+    float: left;
+    width: 49%;
+    min-height: 200px;
+    height: 100%;
+    border: 1px solid black;
+    display: inline-block;
+}
+
+#narration-body {
+    overflow-y: scroll;
+}
+
+.login-box {
+    /*display: inline-block;*/
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left:-300px;
+    margin-top: -177px;
+    border: 3px solid gray;
+    border-radius: 10px;
+    min-width: 600px;
+    min-height: 100px;
+    background: #e6f3ff;
+    line-height: 30px;
+    transform: translate3d(0,0,0) rotateY(0deg);
+    opacity: 1;
+    transition: transform 2s ease-in-out 0s, opacity 2s;
+    text-align: center;
+}
+
+.big-login-box {
+    min-width: 630px;
+    width: 630px;
+    margin-left: -315px;
+}
+
+.login-box.left {
+    transform: translate3d(-100vw,0,0) rotateY(-180deg);
+    /*opacity: 0;
+    overflow: hidden;*/
+}
+
+.login-box.right {
+    transform: translate3d(100vw,0,0) rotateY(180deg);
+    /*opacity: 0;
+    overflow: hidden;*/
+}
+
+.login-title-box {
+    background: #cce6ff;
+    border-bottom: 3px solid gray;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+.login-box table,input {
+    margin: 5px;
+}
+
+.login-box .btn {
+    margin: 5px;
+}
+
+.login-header {
+    text-align: right;
+    margin: 5px;
+}
+
+.login-input {
+    text-align: left;
+}
+
+.login-body {
+    background-color: #111111;
+    width: 100vw;
+    height: 100vh;
+    /*text-align: center;
+    vertical-align: middle;
+    line-height: 100vh;*/
+    overflow: hidden;
+}
+
+.login-body .modal {
+    vertical-align: baseline;
+    line-height: normal;
+}
+
+.character-item {
+    border: 1px solid gray;
+    border-radius: 10px;
+    text-align: center;
+    margin: 5px;
+    min-height: 60px;
+    vertical-align: middle;
+    line-height: 60px;
+    transition: background-color 0.5s;
+    background: lightgray;
+}
+
+.character-item.three-row {
+    line-height: 20px;
+}
+
+@keyframes ripple {
+    0% {
+        background-size: 1% 1%;
+        background-color: #C7F6C7;
+        background-image: radial-gradient(circle at center, lightgreen 0%, lightgreen 10%, transparent 10.1%, transparent 100%);
+    }
+    35% {
+        background-size: 1000% 1000%;
+        background-color: lightgreen;
+        background-image: radial-gradient(circle at center, lightgreen 0%, lightgreen 10%, transparent 10.1%, transparent 100%);
+    }
+    50% {
+        background-size: 1000% 1000%;
+        background-color: lightgreen;
+        background-image: none;
+    }
+    100% {
+        background-size: 1000% 1000%;
+        background-color: #C7F6C7;
+        background-image: none;
+    }
+}
+
+.character-item:hover {
+    cursor: pointer;
+    overflow: hidden;
+    background-image: radial-gradient(circle at center, lightgreen 0%, lightgreen 10%, transparent 10.1%, transparent 100%);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: #C7F6C7;
+    animation: ripple 1.2s 0s normal forwards infinite running ease-in;
+    /*transform: scale(10, 10);*/
+    /*transition: transform .5s, opacity 1s;*/
+}
+
+.character-item>div {
+    padding: 5px;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-sixth-entry {
+    flex: 1;
+}
+
+.flex-third-entry {
+    flex: 2;
+}
+
+.flex-half-entry {
+    flex: 3;
+}
+
+.flex-entry {
+    flex: 6;
+}
+
+color-picker {
+    display: inline-block;
+}

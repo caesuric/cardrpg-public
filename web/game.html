@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="cardrpg" ng-controller="mainCtrl">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.2.8/interact.min.js" type="text/javascript"></script>
+    <script src="js/main.js" type="text/javascript"></script>
+    <title>cardrpg</title>
+  </head>
+  <body style='background-color: #FFFFFF;'>
+    <div class="canvas-container" id='main_canvas_container' style="width: 512px; height: 512px; float: left;">
+        <canvas height='512' id='main_canvas' width='512' style="float: left; width: 512px;"></canvas>
+    </div>
+  </body>
+    <script type="text/ng-template" id="loot.html">
+        <div class="modal-header">
+            <h2 class="modal-title" id="loot-title" style="text-decoration: underline;">Buy Cards</h2>
+        </div>
+        <div class="modal-body" id="loot-body">
+            <h3>Chains: <span ng-bind='chains'></span><br>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(1)" ng-click="merge(1)">Four 1 chains -> One 2 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(2)" ng-click="merge(2)">Four 2 chains -> One 3 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(3)" ng-click="merge(3)">Four 3 chains -> One 4 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(4)" ng-click="merge(4)">Four 4 chains -> One 5 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(5)" ng-click="merge(5)">Four 5 chains -> One 6 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(6)" ng-click="merge(6)">Four 6 chains -> One 7 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(7)" ng-click="merge(7)">Four 7 chains -> One 8 chain</button>
+            <br />
+            Unlock Points: <span ng-bind='unlockPoints'></span> (Red cards are locked. Use Ctrl-Click to unlock.)</h3>
+            <div class="canvas-container" style="width: 854px; height: 1024px; position: relative;">
+                <div class='loot-card' ng-click='click($index, $event)' ng-repeat='drop in drops' ng-style='{"font-size": (drop.fontSize-4)+"px", "background-color": drop.color}'>
+                    Stack: <span ng-bind='drop.stack'></span><br />
+                    Cost: <span ng-bind='drop.cost'></span><br />
+                    <img ng-src='{{drop.img}}'></img>
+                    <div ng-repeat='text in drop.texts'>
+                        <span ng-bind='text'></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="shop.html">
+        <div class="modal-header">
+            <h2 class="modal-title" id="shop-title" style="text-decoration: underline;">Welcome to the Shop!</h2>
+        </div>
+        <div class="modal-body" id="shop-body">
+            <h3>Chains: <span ng-bind='chains'></span><br>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(1)" ng-click="merge(1)">Four 1 chains -> One 2 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(2)" ng-click="merge(2)">Four 2 chains -> One 3 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(3)" ng-click="merge(3)">Four 3 chains -> One 4 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(4)" ng-click="merge(4)">Four 4 chains -> One 5 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(5)" ng-click="merge(5)">Four 5 chains -> One 6 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(6)" ng-click="merge(6)">Four 6 chains -> One 7 chain</button>
+            <button type="button" class="btn btn-primary" ng-if="allowMerge(7)" ng-click="merge(7)">Four 7 chains -> One 8 chain</button>
+            <br />
+            Unlock Points: <span ng-bind='unlockPoints'></span></h3>
+            <div class="canvas-container" style="width: 854px; position: relative;">
+                <div class='loot-card' ng-click='click(0)' ng-style='{"background-color": getColor(1)}'>
+                    Healing Potion<br />
+                    Cost: 1<br />
+                    <img src='assets/images/healingPotion.jpg'></img><br />
+                    Buy a one-shot healing potion that heals you for 28 HP.
+                </div>
+                <div class='loot-card' ng-click='click(1)' ng-style='{"background-color": getColor(2)}'>
+                    Aegis Stone<br />
+                    Cost: 2<br />
+                    <img src='assets/images/damageShield.jpg'></img><br />
+                    Buy a one-shot damage shield that stops the next 28 damage.
+                </div>
+                <div class='loot-card' ng-click='click(2)' ng-style='{"background-color": getColor(3)}'>
+                    Lethe Vial<br />
+                    Cost: 3<br />
+                    <img src='assets/images/trash.jpg'></img><br />
+                    Trash one card from your deck.
+                </div>
+                <div class='loot-card' ng-click='click(3)' ng-style='{"background-color": getColor(4)}'>
+                    Yggdrasil Sap<br />
+                    Cost: 4<br />
+                    <img src='assets/images/MP.jpg'></img><br />
+                    +10 MP, permanently.
+                </div>
+                <div class='loot-card' ng-click='click(4)' ng-style='{"background-color": getColor(5)}'>
+                    Quicksilver<br />
+                    Cost: 5<br />
+                    <img src='assets/images/MPRegen.jpg'></img><br />
+                    +10% MP Regen, permanently.
+                </div>
+                <div class='loot-card' ng-click='click(5)' ng-style='{"background-color": getColor(6)}'>
+                    Essence Flask<br />
+                    Cost: 6<br />
+                    <img src='assets/images/HP.jpg'></img><br />
+                    +30 HP, permanently.
+                </div>
+                <div class='loot-card' ng-click='click(6)' ng-style='{"background-color": getColor(7)}'>
+                    Tome of Knowledge<br />
+                    Cost: 7<br />
+                    <img src='assets/images/XP.jpg'></img><br />
+                    Gain +50% of XP needed for next level.
+                </div>
+                <div class='loot-card' ng-click='click(7)' ng-style='{"background-color": getUnlockPointColor()}'>
+                    Nexus Stone<br />
+                    Cost: 1 Unlock Point<br />
+                    <img src='assets/images/teleport.jpg'></img><br />
+                    Teleport the party down two floors.
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="trash.html">
+        <div class="modal-header">
+            <h2 class="modal-title" id="trash-title" style="text-decoration: underline;">Trashing <span ng-bind='trash.length'></span>/<span ng-bind='trashNumber'></span> Cards</h2>
+        </div>
+        <div class="modal-body" id="trash-body">
+            <h3>Drag cards to trash them</h3>
+            <div class='drag-panel-title'><h3>Deck</h3></div>
+            <div class='drag-panel-title'><h3>Trash</h3></div>
+             <div id='deck-drop' class='dropzone drop-pane'>
+                 <div class='draggable' ng-repeat='item in deck'>
+                     <span ng-bind='item.name'></span>
+                 </div>
+             </div>
+             <div id='trash-drop' class='dropzone drop-pane'>
+                 <div class='draggable' ng-repeat='item in trash'>
+                     <span ng-bind='item.name'></span>
+                 </div>
+             </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-primary" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="prune-deck.html">
+        <div class="modal-header">
+            <h2>Pruning Deck - you must keep <span ng-bind='numberToKeep'></span> new cards and <span ng-bind='starterNumberToKeep'></span> starting cards.</h2>
+        </div>
+        <div class="modal-body" id="prune-deck-body">
+            <h3>Drag cards to keep them</h3>
+            <div class='drag-panel-title'><h3>Deck</h3></div>
+            <div class='drag-panel-title'><h3>Prune</h3></div>
+             <div id='prune-deck-drop' class='prune-dropzone drop-pane'>
+                 <div class='draggable' ng-repeat='item in deck' ng-style='{"background-color": item.color}'>
+                     <span ng-bind='item.name'></span>
+                 </div>
+             </div>
+             <div id='prune-drop' class='prune-dropzone drop-pane'>
+                 <div class='draggable' ng-repeat='item in prune' ng-style='{"background-color": item.color}'>
+                     <span ng-bind='item.name'></span>
+                 </div>
+             </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="class-select.html">
+        <div class="modal-header">
+            <h2 class="modal-title" id="class-select-title" style="text-decoration: underline;">Select Class</h2>
+        </div>
+        <div class="modal-body" id="class-select-body">
+            <div class='half-pane'>
+                <form action="">
+                    <input type="radio" ng-model="selectedClass" ng-click='update()' id="Archer" value="Archer" checked="checked"> Archer</input><br>
+                    <input type="radio" ng-model="selectedClass" ng-click='update()' id="Inferno Mage" value="Inferno Mage"> Inferno Mage</input><br>
+                    <input type="radio" ng-model="selectedClass" ng-click='update()' id="Balance Mage" value="Balance Mage"> Balance Mage</input><br>
+                    <input type="radio" ng-model="selectedClass" ng-click='update()' id="Paladin" value="Paladin"> Paladin</input><br>
+                    <input type="radio" ng-model="selectedClass" ng-click='update()' id="Fighter" value="Fighter"> Fighter</input><br>
+                    <input type="radio" ng-model="selectedClass" ng-click='update()' id="Cleric" value="Cleric"> Cleric</input>
+                </form>
+            </div>
+            <div class='half-pane'>
+                <h3>Class Description</h3>
+                <span ng-bind='classDescription'></span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="narration.html">
+        <div class="modal-header">
+            <h2 class="modal-title" id="narration-title" style="text-decoration: underline;">Narration Log</h2>
+        </div>
+        <div class="modal-body" id="narration-body" ng-style='{"height": height+"px"}'>
+            <div ng-repeat='item in narration' ng-bind='item.text'></span>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="trash-warning.html">
+        <div class="modal-header">
+            <h2 class="modal-title" id="trash-warning-title" style="text-decoration: underline;">Alert</h2>
+        </div>
+        <div class="modal-body" id="trash-warning-body">
+            <div ng-bind='text'></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="tutorial.html">
+        <div class="modal-header">
+            <h2 class="modal-title" id="tutorial-title" style="text-decoration: underline;">Tutorial</h2>
+        </div>
+        <div class="modal-body" id="tutorial-body">
+            Use the arrow keys or WASD to move your character.<br />
+            The numbers 1-6 correspond to the six card abilities on your hotbar.<br />
+            Each time you use an ability it will be replaced by a new one from your deck.<br />
+            When your deck runs out your discard will be shuffled and placed back into your deck.<br />
+            You can buy new cards for your deck by racking up chains of rapidly defeated monsters.<br />
+            The goal is to make it to the 10th floor and defeat the boss.<br />
+            <br />
+            Other keys:<br />
+            &lt; and &gt; - ascend or descend stairs<br />
+            q - quaff (drink) from a fountain<br />
+            b - buy from a shop<br />
+            m - take a mulligan, drawing a new hand of cards<br />
+            n - show bestiary<br />
+            z - toggle minimap<br />
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="deck.html">
+        <div class="modal-header">
+            <h2 class="modal-title" id="deck-title" style="text-decoration: underline;">View Deck</h2>
+        </div>
+        <div class="modal-body" id="deck-body">
+            <div ng-repeat='item in deck' style='display: inline-block;'>
+                <div class='loot-card' ng-style='{"font-size": (item.fontSize-4)+"px", "background-color": item.color, "color": item.textColor}'>
+                    <img ng-src='{{item.img}}'></img>
+                    <div ng-repeat='text in item.texts'>
+                        <span ng-bind='text'></span>
+                    </div>
+                </div>
+                <span style='font-size: 50px; margin-right: 20px;'>x<span ng-bind='item.count'></span></span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="bestiary.html">
+        <div class="modal-header">
+            <h2 class="modal-title" id="bestiary-title" style="text-decoration: underline;">Bestiary</h2>
+        </div>
+        <div class="modal-body" id="bestiary-body">
+            <div ng-repeat='item in bestiary' style='display: inline-block; border: 1px solid black; padding: 5px;'>
+                <div ng-bind='item.name'></div>
+                <div style='width: 32px; height: 32px; position: relative;' ng-style='{"background-color": mobColors[item.name]}'>
+                    <div style='position: absolute; left: 0; top: 0; width: 9px; height: 9px; border-radius: 50%;' ng-style='{"background-color": item.eyeColor}'></div>
+                    <div style='position: absolute; right: 0; top: 0; width: 9px; height: 9px; border-radius: 50%;' ng-style='{"background-color": item.eyeColor}'></div>
+                </div>
+                <div>Defeated: <span ng-bind='item.kills'><span></div>
+                <div>Highest Grade: <span ng-bind='mobClassDescriptions[item.max_class]'></span></div>
+                <div>Levels Encountered: <span ng-bind='item.min_level'></span> - <span ng-bind='item.max_level'></span></div>
+                <div>Details: <span ng-bind='item.details'></span></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </script>
+</html>
