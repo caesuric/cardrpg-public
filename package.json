@@ -14,7 +14,7 @@
     "file-loader": "^0.11.1",
     "font-awesome": "^4.7.0",
     "interact": "0.0.3",
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.0",
     "jspack": "0.0.4",
     "source-map": "^0.5.6",
     "style-loader": "^0.17.0",
